@@ -2,6 +2,7 @@ package com.example.dogs;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -29,12 +30,28 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         viewModel.loadDogImage();
+        viewModel.getIsLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean loading) {
+                if (loading){
+                    progressBar.setVisibility(View.VISIBLE);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
         viewModel.getDogImage().observe(this, new Observer<DogImage>() {
             @Override
             public void onChanged(DogImage dogImage) {
                 Glide.with(MainActivity.this)
                         .load(dogImage.getMessage())//что загружаем
                         .into(imageViewDog);//куда загружаем данные, где отображаем
+            }
+        });
+        buttonLoadImage.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                viewModel.loadDogImage();
             }
         });
     }
