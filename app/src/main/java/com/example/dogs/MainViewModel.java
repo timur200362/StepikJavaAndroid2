@@ -32,7 +32,8 @@ public class MainViewModel extends AndroidViewModel {
     private static final String TAG = "MainViewModel";
 
     private MutableLiveData<DogImage> dogImage = new MutableLiveData<>();
-    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isError=new MutableLiveData<>();
     private CompositeDisposable compositeDisposable=new CompositeDisposable();
 
     public MainViewModel(@NonNull Application application) {
@@ -47,6 +48,10 @@ public class MainViewModel extends AndroidViewModel {
         return isLoading;
     }
 
+    public LiveData<Boolean> getIsError() {
+        return isError;
+    }
+
     public void loadDogImage() {
         Disposable disposable=loadDogImageRx()
                 .subscribeOn(Schedulers.io())
@@ -54,6 +59,7 @@ public class MainViewModel extends AndroidViewModel {
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
                     public void accept(Disposable disposable) throws Throwable {
+                        isError.setValue(false);
                         isLoading.setValue(true);//прогресс бар вызываем когда подписываемся
                     }
                 })
@@ -71,6 +77,7 @@ public class MainViewModel extends AndroidViewModel {
                 }, new Consumer<Throwable>(){
             @Override
             public void accept(Throwable throwable) throws Throwable {
+                isError.setValue(true);
                 Log.d(TAG,"Error: " + throwable.getMessage());
             }
         });
