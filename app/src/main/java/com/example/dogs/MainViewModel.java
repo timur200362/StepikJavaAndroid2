@@ -33,8 +33,8 @@ public class MainViewModel extends AndroidViewModel {
 
     private MutableLiveData<DogImage> dogImage = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isError=new MutableLiveData<>();
-    private CompositeDisposable compositeDisposable=new CompositeDisposable();
+    private MutableLiveData<Boolean> isError = new MutableLiveData<>();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -53,7 +53,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void loadDogImage() {
-        Disposable disposable=loadDogImageRx()
+        Disposable disposable = loadDogImageRx()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -74,41 +74,18 @@ public class MainViewModel extends AndroidViewModel {
                     public void accept(DogImage image) throws Throwable {
                         dogImage.setValue(image);
                     }
-                }, new Consumer<Throwable>(){
-            @Override
-            public void accept(Throwable throwable) throws Throwable {
-                isError.setValue(true);
-                Log.d(TAG,"Error: " + throwable.getMessage());
-            }
-        });
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Throwable {
+                        isError.setValue(true);
+                        Log.d(TAG, "Error: " + throwable.getMessage());
+                    }
+                });
         compositeDisposable.add(disposable);
     }
 
     private Single<DogImage> loadDogImageRx() {
-        return Single.fromCallable(new Callable<DogImage>() {
-            @Override
-            public DogImage call() throws Exception {
-                URL url = new URL(BASE_URL);//создаем адрес для отправки запроса
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();//открываем соединение и сохраняем его
-                InputStream inputStream = urlConnection.getInputStream();//чтобы считывать данные с сервера(считывает по байтам)
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);//чтобы считывать по символам
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);//чтобы считывать единой строкой
-
-                StringBuilder data = new StringBuilder();//для оптимизации StringBuilder
-                String result;
-                do {//цикл чтобы считывать много строк, а не одну
-                    result = bufferedReader.readLine();
-                    if (result != null) {
-                        data.append(result);
-                    }
-                } while (result != null);
-
-                JSONObject jsonObject = new JSONObject(data.toString());
-                String message = jsonObject.getString(KEY_MESSAGE);
-                String status = jsonObject.getString(KEY_STATUS);
-                return new DogImage(message, status);
-            }
-        });
+        return ApiFactory.getApiService().loadDogImage();
     }
 
     @Override
