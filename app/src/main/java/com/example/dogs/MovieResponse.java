@@ -1,5 +1,6 @@
 package com.example.dogs;
 
+import com.example.dogs.responceClass.Movie;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
