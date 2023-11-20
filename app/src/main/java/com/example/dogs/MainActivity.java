@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.dogs.responseClass.Movie;
 
@@ -17,12 +18,14 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
     private RecyclerView recyclerViewMovies;
+    private ProgressBar progressBarLoading;
     private MoviesAdapter moviesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressBarLoading=findViewById(R.id.progressBarLoading);
         recyclerViewMovies=findViewById(R.id.recyclerViewMovies);
         moviesAdapter=new MoviesAdapter();
         recyclerViewMovies.setAdapter(moviesAdapter);
@@ -34,7 +37,16 @@ public class MainActivity extends AppCompatActivity {
                 moviesAdapter.setMovies(movies);
             }
         });
-        viewModel.loadMovies();
+        viewModel.getIsLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoading) {
+                if (isLoading){
+                    progressBarLoading.setVisibility(View.VISIBLE);
+                } else {
+                    progressBarLoading.setVisibility(View.GONE);
+                }
+            }
+        });
         moviesAdapter.setOnReachEndListener(new MoviesAdapter.OnReachEndListener() {
             @Override
             public void onReachEnd() {
