@@ -2,7 +2,9 @@ package com.example.dogs.responseClass;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Rating {
+import java.io.Serializable;
+
+public class Rating implements Serializable {
     @SerializedName("kp")
     private double kp;
 
