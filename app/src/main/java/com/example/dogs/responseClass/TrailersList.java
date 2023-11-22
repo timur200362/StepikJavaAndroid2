@@ -8,7 +8,7 @@ public class TrailersList {
     @SerializedName("trailers")
     private List<Trailer> trailerList;
 
-    public List<Trailer> getTrailerList() {
+    public List<Trailer> getTrailer() {
         return trailerList;
     }
 
