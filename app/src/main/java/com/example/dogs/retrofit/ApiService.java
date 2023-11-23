@@ -1,5 +1,6 @@
-package com.example.dogs;
+package com.example.dogs.retrofit;
 
+import com.example.dogs.responseClass.MovieResponse;
 import com.example.dogs.responseClass.ReviewResponse;
 import com.example.dogs.responseClass.TrailerResponse;
 

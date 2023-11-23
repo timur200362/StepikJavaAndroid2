@@ -1,4 +1,4 @@
-package com.example.dogs;
+package com.example.dogs.responseClass;
 
 import com.example.dogs.responseClass.Movie;
 import com.google.gson.annotations.SerializedName;

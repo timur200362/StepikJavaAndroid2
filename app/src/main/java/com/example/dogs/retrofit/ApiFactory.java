@@ -1,4 +1,4 @@
-package com.example.dogs;
+package com.example.dogs.retrofit;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;

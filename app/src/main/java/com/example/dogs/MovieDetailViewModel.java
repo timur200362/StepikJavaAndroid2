@@ -8,10 +8,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.dogs.db.MovieDao;
+import com.example.dogs.db.MovieDatabase;
+import com.example.dogs.responseClass.Movie;
 import com.example.dogs.responseClass.Review;
 import com.example.dogs.responseClass.ReviewResponse;
 import com.example.dogs.responseClass.Trailer;
 import com.example.dogs.responseClass.TrailerResponse;
+import com.example.dogs.retrofit.ApiFactory;
 
 import java.util.List;
 
@@ -28,8 +32,15 @@ public class MovieDetailViewModel extends AndroidViewModel {
     private final CompositeDisposable compositeDisposable=new CompositeDisposable();
     private MutableLiveData<List<Trailer>> trailers=new MutableLiveData<>();
     private MutableLiveData<List<Review>> reviews=new MutableLiveData<>();
+
+    private final MovieDao movieDao;
+
     public MovieDetailViewModel(@NonNull Application application) {
         super(application);
+        movieDao= MovieDatabase.getInstance(application).movieDao();
+    }
+    public LiveData<Movie> getFavouriteMovie(int movieId){
+        return movieDao.getFavouriteMovie(movieId);
     }
 
     public LiveData<List<Trailer>> getTrailers() {
@@ -41,7 +52,7 @@ public class MovieDetailViewModel extends AndroidViewModel {
     }
 
     public void loadReviews(int id){
-        Disposable disposable=ApiFactory.apiService.loadReviews(id)
+        Disposable disposable= ApiFactory.apiService.loadReviews(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<ReviewResponse>() {
@@ -55,6 +66,21 @@ public class MovieDetailViewModel extends AndroidViewModel {
                         Log.d(TAG, throwable.toString());
                     }
                 });
+        compositeDisposable.add(disposable);
+    }
+
+    public void insertMovie(Movie movie){
+        Disposable disposable=movieDao.insertMovie(movie)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+        compositeDisposable.add(disposable);
+    }
+    public void removeMovie(int movieId){
+        Disposable disposable=movieDao.removeMovie(movieId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
         compositeDisposable.add(disposable);
     }
 

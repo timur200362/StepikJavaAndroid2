@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dogs.responseClass.Review;
-import com.example.dogs.responseClass.Trailer;
 
 import java.util.ArrayList;
 import java.util.List;

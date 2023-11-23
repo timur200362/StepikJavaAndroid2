@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.dogs.responseClass.Movie;
+import com.example.dogs.responseClass.MovieResponse;
+import com.example.dogs.retrofit.ApiFactory;
 
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class MainViewModel extends AndroidViewModel {
         if (loading!=null && loading){
             return;
         }
-        Disposable disposable=ApiFactory.apiService.loadMovies(page)
+        Disposable disposable= ApiFactory.apiService.loadMovies(page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
