@@ -1,5 +1,6 @@
 package com.example.dogs;
 
+import com.example.dogs.responseClass.ReviewResponse;
 import com.example.dogs.responseClass.TrailerResponse;
 
 import io.reactivex.rxjava3.core.Single;
@@ -12,4 +13,7 @@ public interface ApiService {
 
     @GET("movie?token=9S5E3D1-2NVM9QY-MZTDBVR-GBEHFMP&field=id")
     Single<TrailerResponse> loadTrailers(@Query("search") int id);
+
+    @GET("review?token=9S5E3D1-2NVM9QY-MZTDBVR-GBEHFMP&field=movieId")
+    Single<ReviewResponse> loadReviews(@Query("search") int id);
 }

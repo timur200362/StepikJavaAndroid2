@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.dogs.responseClass.Movie;
+import com.example.dogs.responseClass.Review;
+import com.example.dogs.responseClass.ReviewResponse;
 import com.example.dogs.responseClass.Trailer;
 import com.example.dogs.responseClass.TrailerResponse;
 
@@ -37,7 +39,9 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView textViewYear;
     private TextView textViewDescription;
     private RecyclerView recyclerViewTrailers;
+    private RecyclerView recyclerViewReviews;
     private TrailersAdapter trailersAdapter;
+    private ReviewAdapter reviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         initViews();
         trailersAdapter=new TrailersAdapter();
         recyclerViewTrailers.setAdapter(trailersAdapter);
+        reviewAdapter=new ReviewAdapter();
+        recyclerViewReviews.setAdapter(reviewAdapter);
         Movie movie=(Movie) getIntent().getSerializableExtra(EXTRA_MOVIE);
 
         Glide.with(this)
@@ -71,6 +77,13 @@ public class MovieDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        viewModel.getReviews().observe(this, new Observer<List<Review>>() {
+            @Override
+            public void onChanged(List<Review> reviewList) {
+                reviewAdapter.setReviews(reviewList);
+            }
+        });
+        viewModel.loadReviews(movie.getId());
     }
     private void initViews(){
         imageViewPoster=findViewById(R.id.imageViewPoster);
@@ -78,6 +91,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         textViewYear=findViewById(R.id.textViewYear);
         textViewDescription=findViewById(R.id.textViewDescription);
         recyclerViewTrailers=findViewById(R.id.recyclerViewTrailers);
+        recyclerViewReviews=findViewById(R.id.recyclerViewReviews);
     }
     public static Intent newIntent(Context context, Movie movie){
         Intent intent=new Intent(context,MovieDetailActivity.class);
