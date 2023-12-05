@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "761930128378",
+    "project_id": "messenger-93ab4",
+    "storage_bucket": "messenger-93ab4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761930128378:android:92ce828fed302759bf6243",
+        "android_client_info": {
+          "package_name": "com.example.dogs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaCUz9aPEDrXpL2UyI5xY66CsJJfIZ9-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
